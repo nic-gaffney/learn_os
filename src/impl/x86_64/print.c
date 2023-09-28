@@ -1,5 +1,8 @@
 #include "print.h"
 
+#include <stdint.h>
+#include <stddef.h>
+
 const static size_t NUM_COLS = 80;
 const static size_t NUM_ROWS = 25;
 
@@ -11,7 +14,7 @@ struct Char {
 struct Char* buffer = (struct Char*) 0xb8000;
 size_t col = 0;
 size_t row = 0;
-uint8_t color = PRINT_COLOR_WHITE | PRINT_COLOR_BLACK << 4;
+uint8_t color = PRINT_COLOR_YELLOW | (PRINT_COLOR_BLACK << 4);
 
 void clear_row(size_t row){
   struct Char empty = (struct Char) {
@@ -48,8 +51,8 @@ void print_newline() {
   clear_row(NUM_COLS - 1);
 }
 
-void print_char(char character) {
-  if (character = '\n') {
+void print_char(char c) {
+  if (c == '\n') {
     print_newline();
     return;
   }
@@ -59,7 +62,7 @@ void print_char(char character) {
   }
 
   buffer[col + NUM_COLS * row] = (struct Char) {
-    character: (uint8_t) character,
+    character: c,
     color: color,
   };
 
@@ -67,12 +70,18 @@ void print_char(char character) {
 }
 
 void print_str(char* str) {
-  for (size_t i = 0; 1; i++) {
-    char character = (uint8_t) str[i];
-    if (character == '\0') {
-      return;
-    }
-    print_char(character);
+  //for (size_t i = 0; 1; i++) {
+  //  char character = (uint8_t) str[i];
+  //  if (character == '\0') {
+  //    return;
+  //  }
+  //  print_char(character);
+  //}
+  int i=0;
+  char c = str[i];
+  while (c != '\0') {
+    print_char(c);
+    c = str[++i];
   }
 }
 
